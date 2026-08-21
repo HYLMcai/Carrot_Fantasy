@@ -32,6 +32,33 @@
 Thumbs.db
 desktop.ini
 
+# ============ 本地素材（保留在本地，不随代码仓库上传）============
+/Assets/Animation/
+/Assets/Gizmos/
+/Assets/Scenes/
+/Assets/Move.anim
+/Assets/Move.anim.meta
+/Assets/Resources/Cards/
+/Assets/Resources/Game/
+/Assets/Resources/Icon/
+/Assets/Resources/Maps/
+/Assets/Resources/MonsterImage/
+/Assets/Resources/Prefab/
+/Assets/Resources/TowerImage/
+/Assets/Resources/Sound/
+/Assets/Resources/Sound.meta
+/Assets/Resources/Cards.meta
+/Assets/Resources/Game.meta
+/Assets/Resources/Icon.meta
+/Assets/Resources/Maps.meta
+/Assets/Resources/MonsterImage.meta
+/Assets/Resources/Prefab.meta
+/Assets/Resources/TowerImage.meta
+/Assets/Animation.meta
+/Assets/Gizmos.meta
+/Assets/Scenes.meta
+/Assets/~UnityDirMonSyncFile~*
+
 # ============ Misc ============
 *.log
 crashlytics-build.properties
