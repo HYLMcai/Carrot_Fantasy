@@ -10,7 +10,7 @@
 
 - **引擎**：Unity 2022.3.62f1c1（2D）
 - **语言**：C#
-- **架构**：自研事件驱动 MVC 框架（无第三方 MVC 库）
+- **架构**：手写事件驱动 MVC 框架（无第三方 MVC 库）
 - **动画补间**：DOTween
 - **UI**：UGUI
 - **关卡数据**：XML
@@ -19,7 +19,7 @@
 
 ## 项目亮点
 
-1. **自研 MVC 游戏框架** —— 纯 C# 手写事件驱动架构，通过反射 + 事件映射完成控制器动态分发，数据层（Model）/ 逻辑层（Controller）/ 表现层（View）解耦；View 随场景切换自动注册 / 注销。
+1. **手写 MVC 游戏框架** —— 纯 C# 手写事件驱动架构，通过反射 + 事件映射完成控制器动态分发，数据层（Model）/ 逻辑层（Controller）/ 表现层（View）解耦；View 随场景切换自动注册 / 注销。
 2. **通用对象池系统** —— `IReusable` 接口 + 泛型对象池管理器，统一接管炮塔、子弹、怪物、萝卜等高频生成 / 销毁对象，避免频繁 `Instantiate` / `Destroy` 的 GC 开销。
 3. **可视化关卡编辑器** —— 基于 Unity Editor 扩展（自定义 Inspector + Gizmos），左键绘制怪物路线、右键标记可建造格，一键序列化为 XML，实现"配置驱动"的内容生产。
 4. **可扩展实体体系** —— 抽象 `Role` / `Tower` / `Bullet` 三层基类，多态支撑 5 种炮塔、5 种子弹、6 种怪物，新增单位只需实现子类、不改框架核心。
@@ -33,7 +33,7 @@
 Assets/
 ├── Script/                 # 全部游戏逻辑代码
 │   ├── Game/               # 引导（Game.cs）+ 关卡数据类（Level/Tile/Round/Point）
-│   ├── MVC/                # 自研 MVC 框架
+│   ├── MVC/                # 手写 MVC 框架
 │   │   ├── Controller/     # 控制器（纯 C#，每次事件新建）
 │   │   ├── Model/          # 模型（GameModel / RoundModel）
 │   │   └── View/           # 视图（MonoBehaviour，随场景注册/注销）
