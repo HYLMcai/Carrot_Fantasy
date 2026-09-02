@@ -25,6 +25,10 @@ public class LevelUpIcon : MonoBehaviour
         this.gm = gm;
         this.view = view;
 
+        // Reset visibility first: a previously shown max-level tower leaves txtPrice hidden.
+        transform.Find("txtPrice").gameObject.SetActive(true);
+        this.objImg.SetActive(true);
+
         if (tower.IsTopLevel)
         {
             this.objImg.SetActive(false);
