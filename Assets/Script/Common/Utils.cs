@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using System.IO;
 using System.Text;
 using UnityEngine.UI;
+using System;
 
 //GameUtils
 //
@@ -128,4 +129,5 @@ public class Utils
         sb.Append("</Level>");
         File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
     }
+
 }
