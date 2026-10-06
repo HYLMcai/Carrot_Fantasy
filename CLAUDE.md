@@ -1,16 +1,26 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 本文件为 Claude Code（claude.ai/code）在此仓库中工作时提供指导。
 
 ## 项目概述
 
-一款使用 **Unity 2022.3.62f1c1**（见 `ProjectSettings/ProjectVersion.txt`）构建的 2D 塔防游戏（"保卫萝卜" / Carrot-Fantasy 风格）。玩家在网格上放置炮塔，阻止怪物抵达并伤害萝卜（`LuoBo`）。游戏逻辑代码全部位于 `Assets/Script/` 目录；美术资源和预制体位于 `Assets/Resources/` 与 `Assets/Animation/` 目录。
+一款使用 **Unity 2022.3.62f3c1**（见 `ProjectSettings/ProjectVersion.txt`）构建的 2D 塔防游戏（"保卫萝卜" / Carrot-Fantasy 风格）。玩家在网格上放置炮塔，阻止怪物抵达并伤害萝卜（`LuoBo`）。游戏逻辑代码全部位于 `Assets/Script/`。
 
-本项目没有自定义的构建 / 代码检查 / 测试工具链。项目通过 Unity 编辑器打开并运行；测试通过 Unity 的 Test Framework 运行（已作为包安装，但当前未真正使用——见 `Assets/Script/test/`，其中是练习 / 实验性脚本，而非真正的测试）。
+**本仓库是"纯代码 + 关卡数据"版本，无法直接编译运行。** 美术 / 音效 / 动画 / 预制体 / 场景等素材已从仓库移除（`.gitignore` 忽略了 `Assets/Resources/Prefab/`、`Assets/Resources/Icon/`、`Assets/Resources/Maps/`、`Assets/Animation/`、`Assets/Scenes/` 等目录——本地工程可能仍存在这些文件，但不会提交）。仓库内实际保留的是代码与 `Assets/Resources/Levels/level*.xml` 关卡数据。补齐素材的路径约定见 `README.md`。
+
+## 构建 / 测试 / 代码检查
+
+本项目没有自定义的构建 / 代码检查 / 测试工具链，也没有命令行批处理脚本：
+
+- **构建 / 运行**：用 Unity 编辑器打开工程，打开 `Assets/Scenes/00_IniScene.unity` 后 Play 运行。没有 CLI 构建脚本。
+- **测试**：Unity Test Framework 已作为包安装（`com.unity.test-framework`），但当前没有任何真正的测试；`Assets/Script/test/` 里是练习 / 实验性脚本，不是测试。
+- **代码检查**：无 lint、无 CI 配置。
 
 ## 源码编码
 
-所有 `.cs` 文件均为 **GBK/ISO-8859 编码，包含中文注释，并使用 CRLF 行尾**。编辑这些文件时，请保留原有编码和行尾，不要重新格式化或改写中文注释。Bash 工具会把这些注释显示为乱码——如需了解其含义，请使用 `Read` 工具读取。
+所有 `.cs` 文件均为 **GBK 编码，包含中文注释，并使用 CRLF 行尾**（`file` 命令会把 GBK 误报为 ISO-8859）。编辑这些文件时，请保留原有编码和行尾，不要重新格式化或改写中文注释。Bash 工具会把这些注释显示为乱码——如需了解其含义，请使用 `Read` 工具读取。
 
 ## 架构
 
@@ -42,6 +52,7 @@
   - `LuoBo`（`Object/LuoBo.cs`）—— 需要保卫的萝卜；它的 `TakeDamge` 会驱动 Animator 的 HP 参数。
 - `Tower`（`Object/Tower/Tower.cs`）—— 抽象的池化炮塔。`Load(Tile, TowerInfo)` 完成配置。基类 `Update()` 负责所有索敌逻辑（通过 `FindObjectsOfType<Monster>` 找到射程内最近的怪物）、瓶子类炮塔的旋转，以及开火间隔计时；子类重写 `Shot(target)` / `Shot(target, targetChain)`。在 `Object/Tower/*/` 下有五种实现：`Bottle`、`Fan`、`FireBottle`、`Lightning`（链式 / `IsChain`）和 `Shit`，每种都对应一个 `Bullet` 子类（基类在 `Object/Tower/Bullet.cs`，具体实现在各类型文件夹下）。`IsLaser` 子弹持续造成伤害；其他为单次命中。
 - `Map`（`Map.cs`）—— 8×12 的 `Tile` 网格（`Game/Data/Tile.cs`）。`Tile` 包含 `X`、`Y`、`CanHold`（能否放置炮塔），以及一个存放已放置 `Tower` 的 `data` 字段。Map 会加载一个 `Level` 的可放置点 / 路径点，暴露 `Road`（怪物的路径点路径），并在格子被点击（左键 / 右键）时触发 `OnTileClickEvent`。
+  - **坐标约定易混淆（手写 XML 关卡时的坑）**：XML 关卡里 `Point` 的 `X` 是**列**（水平，0–11）、`Y` 是**行**（垂直，0–7）；而内部 `Tile` 相反——`InitGrid` 里 `new Tile(row, col)`，即 `Tile.X` 是行、`Tile.Y` 是列，`Map.GetTile(int x, int y)` 的 `x` 也是列、`y` 是行。`Utils.SaveLevel` 序列化时做了 `X="{point.Y}"` / `Y="{point.X}"` 的交换来对齐 XML 的自然读法，加载时再换回来。手写编辑 XML 关卡时按「`X`=列、`Y`=行」填写即可。
 
 ### 对象池
 
